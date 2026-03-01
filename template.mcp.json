@@ -1,0 +1,4 @@
+{
+  "$comment": "MCP server configuration template. Customize for your marketplace.",
+  "servers": {}
+}

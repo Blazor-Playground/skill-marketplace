@@ -1,0 +1,24 @@
+name: Sync Mirrors
+
+# Enable schedule by uncommenting the cron line below
+on:
+  workflow_dispatch:
+  # schedule:
+  #   - cron: '0 */6 * * *'  # Every 6 hours
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Sync mirrors
+        run: dotnet run scripts/sync-mirror.cs

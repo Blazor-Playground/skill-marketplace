@@ -1,0 +1,13 @@
+{
+  "name": "sample",
+  "description": "A sample plugin group demonstrating the marketplace structure",
+  "version": "0.1.0",
+  "skills": [
+    {
+      "name": "hello-world",
+      "path": "skills/hello-world",
+      "description": "A minimal example skill"
+    }
+  ],
+  "agents": []
+}

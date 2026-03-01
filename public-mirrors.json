@@ -1,0 +1,5 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$comment": "Each mirror produces a standalone plugin marketplace in a target repo. Add your mirrors below.",
+  "mirrors": []
+}
