@@ -369,6 +369,16 @@ var marketplaceCmd = new Command("marketplace", "Marketplace authoring utilities
     var initCmd = new Command("init", "Scaffold a new plugin group with a first skill");
     initCmd.SetAction(pr => RunMarketplaceInit(pr.GetValue(dryRunOption), pr.GetValue(verboseOption)));
     marketplaceCmd.Subcommands.Add(initCmd);
+
+    var readmeOutputOption = new Option<string?>("--output")
+    {
+        Description = "Write markdown to this file instead of stdout"
+    };
+    var readmeCmd = new Command("readme", "Auto-generate a markdown table of all plugins and skills");
+    readmeCmd.Options.Add(readmeOutputOption);
+    readmeCmd.SetAction(pr => RunMarketplaceReadme(
+        pr.GetValue(readmeOutputOption), pr.GetValue(dryRunOption), pr.GetValue(verboseOption)));
+    marketplaceCmd.Subcommands.Add(readmeCmd);
 }
 rootCommand.Subcommands.Add(marketplaceCmd);
 
@@ -2363,6 +2373,96 @@ void RunMarketplaceInit(bool dryRun, bool verbose)
     PrintInfo($"    {pluginJsonPath}");
     PrintInfo($"    {skillMdPath}");
     PrintInfo($"  Next: edit {skillMdPath} to add your skill instructions.");
+}
+
+void RunMarketplaceReadme(string? outputPath, bool dryRun, bool verbose)
+{
+    PrintHeader("Marketplace Readme");
+
+    var marketplacePath = Path.Combine(repoRoot, ".github", "plugin", "marketplace.json");
+    if (!File.Exists(marketplacePath))
+    {
+        PrintError($"  marketplace.json not found at {marketplacePath}");
+        return;
+    }
+
+    var root = ReadJsoncNode(marketplacePath) as JsonObject;
+    if (root == null)
+    {
+        PrintError("  Failed to parse marketplace.json");
+        return;
+    }
+
+    var plugins = root["plugins"] as JsonArray;
+    if (plugins == null || plugins.Count == 0)
+    {
+        PrintWarning("  No plugins found in marketplace.json");
+        return;
+    }
+
+    var sb = new System.Text.StringBuilder();
+    sb.AppendLine("| Plugin | Skills | Description |");
+    sb.AppendLine("|--------|--------|-------------|");
+
+    foreach (var entry in plugins)
+    {
+        var obj = entry as JsonObject;
+        if (obj == null) continue;
+
+        var name = obj["name"]?.ToString() ?? "(unknown)";
+        var source = obj["source"]?.ToString();
+        var description = obj["description"]?.ToString() ?? "";
+
+        var skillNames = new List<string>();
+        if (source != null)
+        {
+            var pluginJsonPath = Path.Combine(repoRoot, source, "plugin.json");
+            if (File.Exists(pluginJsonPath))
+            {
+                var pluginNode = ReadJsoncNode(pluginJsonPath) as JsonObject;
+                var skills = pluginNode?["skills"] as JsonArray;
+                if (skills != null)
+                {
+                    foreach (var s in skills)
+                    {
+                        var sn = (s as JsonObject)?["name"]?.ToString();
+                        if (sn != null) skillNames.Add(sn);
+                    }
+                }
+            }
+            else if (verbose)
+            {
+                PrintWarning($"  plugin.json not found: {pluginJsonPath}");
+            }
+        }
+
+        var skillsCell = skillNames.Count > 0 ? string.Join(", ", skillNames) : "(none)";
+        sb.AppendLine($"| {name} | {skillsCell} | {description} |");
+    }
+
+    var markdown = sb.ToString().TrimEnd();
+
+    if (dryRun)
+    {
+        PrintInfo("  Dry-run — generated markdown:");
+        Console.WriteLine();
+        Console.WriteLine(markdown);
+        return;
+    }
+
+    if (outputPath != null)
+    {
+        var fullPath = Path.IsPathRooted(outputPath) ? outputPath : Path.Combine(repoRoot, outputPath);
+        var dir = Path.GetDirectoryName(fullPath);
+        if (dir != null && !Directory.Exists(dir))
+            Directory.CreateDirectory(dir);
+        File.WriteAllText(fullPath, markdown + Environment.NewLine);
+        PrintSuccess($"  Wrote marketplace table to {fullPath}");
+    }
+    else
+    {
+        Console.WriteLine(markdown);
+    }
 }
 
 string SkillTitleCase(string kebab) =>
