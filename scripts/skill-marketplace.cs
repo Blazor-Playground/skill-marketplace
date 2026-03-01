@@ -86,7 +86,7 @@ var backupPathOption = new Option<string?>("--backup-path")
 // Root Command
 // ============================================================================
 
-var rootCommand = new RootCommand("Plugin marketplace asset manager")
+var rootCommand = new RootCommand("Skill Marketplace CLI — manage plugins, skills, and agents")
 {
     editionOption, targetOption, exactOption, forceOption, dryRunOption, verboseOption, backupPathOption
 };
