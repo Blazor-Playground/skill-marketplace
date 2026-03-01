@@ -1,0 +1,73 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "marketplace.schema.json",
+  "title": "Marketplace Configuration",
+  "description": "Schema for marketplace.json files in the skill marketplace",
+  "type": "object",
+  "required": ["name", "plugins"],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string",
+      "description": "The marketplace name"
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Optional metadata about the marketplace",
+      "properties": {
+        "description": {
+          "type": "string",
+          "description": "A short description of the marketplace"
+        },
+        "version": {
+          "type": "string",
+          "description": "Semantic version of the marketplace",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$"
+        }
+      },
+      "additionalProperties": false
+    },
+    "owner": {
+      "type": "object",
+      "description": "Optional owner information",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The owner name or organization"
+        }
+      },
+      "additionalProperties": false
+    },
+    "plugins": {
+      "type": "array",
+      "description": "Plugins registered in this marketplace",
+      "items": {
+        "type": "object",
+        "required": ["name", "source", "description", "version"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The plugin name"
+          },
+          "source": {
+            "type": "string",
+            "description": "Relative path to the plugin directory"
+          },
+          "description": {
+            "type": "string",
+            "description": "A short description of the plugin"
+          },
+          "version": {
+            "type": "string",
+            "description": "Semantic version of the plugin",
+            "pattern": "^\\d+\\.\\d+\\.\\d+$"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

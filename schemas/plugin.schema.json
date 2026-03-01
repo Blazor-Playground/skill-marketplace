@@ -1,0 +1,73 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "plugin.schema.json",
+  "title": "Plugin Configuration",
+  "description": "Schema for plugin.json files in the skill marketplace",
+  "type": "object",
+  "required": ["name", "description", "version"],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string",
+      "description": "The plugin name"
+    },
+    "description": {
+      "type": "string",
+      "description": "A short description of the plugin"
+    },
+    "version": {
+      "type": "string",
+      "description": "Semantic version of the plugin",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "skills": {
+      "type": "array",
+      "description": "Skills provided by this plugin",
+      "items": {
+        "type": "object",
+        "required": ["name", "path", "description"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The skill name"
+          },
+          "path": {
+            "type": "string",
+            "description": "Relative path to the skill directory"
+          },
+          "description": {
+            "type": "string",
+            "description": "A short description of the skill"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "agents": {
+      "type": "array",
+      "description": "Agents provided by this plugin",
+      "items": {
+        "type": "object",
+        "required": ["name", "path", "description"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The agent name"
+          },
+          "path": {
+            "type": "string",
+            "description": "Relative path to the agent directory"
+          },
+          "description": {
+            "type": "string",
+            "description": "A short description of the agent"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

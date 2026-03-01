@@ -80,15 +80,21 @@ A `plugin.json` looks like this:
 
 | Command | Description |
 |---------|-------------|
-| `install` | Install marketplace skills into your environment |
-| `marketplace init` | Scaffold a new plugin with starter files |
-| `sync` | Sync skills from a remote marketplace mirror |
-| `list` | List all available plugins and skills |
+| `skills <list\|install\|uninstall\|diff>` | Manage agent skills (SKILL.md folders) |
+| `agents <list\|install\|uninstall\|diff>` | Manage custom agents (.agent.md) |
+| `plugin <install\|list\|diff\|uninstall> [name]` | Manage plugin groups (skills + agents + MCP + LSP) |
+| `prompts <list\|install\|uninstall\|diff>` | Manage prompt files (.prompt.md) |
+| `instructions <list\|install\|uninstall\|diff>` | Manage instruction files |
+| `mcp <list\|install\|uninstall\|diff>` | Manage MCP server configuration |
+| `settings <list\|update\|diff>` | Manage VS Code settings |
+| `all <list\|install\|uninstall\|diff>` | Bulk operations across all categories |
+| `bootstrap` | Clone repo, install all assets, and clean up |
+| `marketplace init` | Scaffold a new plugin group with a first skill |
 
 Run any command with:
 
 ```bash
-dotnet run scripts/skill-marketplace.cs -- <command>
+dotnet run scripts/skill-marketplace.cs -- <command> [subcommand] [options]
 ```
 
 ## Documentation
