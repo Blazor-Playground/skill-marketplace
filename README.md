@@ -25,27 +25,98 @@ Each marketplace ships with:
    dotnet run scripts/skill-marketplace.cs -- install
    ```
 
+## Installing from Your Marketplace
+
+Once you've published plugins, others can install them. Replace `<owner>/<repo>` with your marketplace's GitHub path.
+
+### GitHub Copilot CLI
+
+```
+/plugin marketplace add <owner>/<repo>
+/plugin marketplace browse <marketplace-name>
+/plugin install <plugin-name>@<marketplace-name>
+/plugin list
+```
+
+Or install directly from GitHub:
+```
+/plugin install <owner>/<repo>:plugins/<plugin-name>
+```
+
+List and manage installed skills:
+```
+/skills list
+/skills        # toggle on/off with arrow keys + spacebar
+/skills reload # pick up newly added skills
+```
+
+### Claude Code
+
+```
+/plugin marketplace add <owner>/<repo>
+/plugin   # → go to Discover tab
+/plugin install <plugin-name>@<marketplace-name>
+```
+
+### VS Code / VS Code Insiders (Preview)
+
+```jsonc
+// settings.json
+{
+  "chat.plugins.enabled": true,
+  "chat.plugins.marketplaces": ["<owner>/<repo>"]
+}
+```
+
+Once configured, type `/plugins` in Copilot Chat to browse and install plugins from the marketplace.
+
+### CLI Tool
+
+```powershell
+# Requires .NET 10 SDK
+dotnet run scripts/skill-marketplace.cs -- all list      # see what's in the repo
+dotnet run scripts/skill-marketplace.cs -- all install    # install everything locally
+dotnet run scripts/skill-marketplace.cs -- skills diff    # compare repo vs installed
+dotnet run scripts/skill-marketplace.cs -- all install --exact  # full sync
+```
+
 ## Repository Structure
 
 ```
 .
 ├── .github/
+│   ├── agents/                    # Copilot agents for multi-step workflows
+│   │   └── marketplace-manager.agent.md
+│   ├── copilot-instructions.md    # Tells Copilot how to work in this repo
 │   ├── plugin/
-│   │   └── marketplace.json      # Marketplace manifest — lists all plugins
-│   └── workflows/                # CI/CD workflows
+│   │   └── marketplace.json       # Marketplace manifest — lists all plugins
+│   ├── skills/                    # Project-level skills
+│   │   └── skill-authoring/
+│   │       └── SKILL.md
+│   └── workflows/                 # CI/CD workflows
 ├── docs/
-│   ├── CLI-REFERENCE.md          # Full CLI command reference
-│   └── CUSTOMIZATION.md          # Guide to customizing your marketplace
+│   ├── CLI-REFERENCE.md           # Full CLI command reference
+│   └── CUSTOMIZATION.md           # Guide to customizing your marketplace
+├── instructions/                  # Instruction files (installed via CLI)
+│   └── skill-conventions.md
 ├── plugins/
-│   └── sample/                   # Example plugin
-│       ├── plugin.json           # Plugin metadata and skill list
-│       └── skills/
-│           └── hello-world/
-│               └── SKILL.md      # Skill definition
+│   └── sample/                    # Example plugin
+│       ├── plugin.json            # Plugin metadata and skill list
+│       ├── skills/
+│       │   ├── hello-world/
+│       │   │   └── SKILL.md
+│       │   └── greeting-customizer/
+│       │       ├── SKILL.md
+│       │       └── references/
+│       │           └── locale-patterns.md
+│       └── agents/
+│           └── greeter/
+│               └── greeter.agent.md
+├── schemas/                       # JSON validation schemas
 ├── scripts/
-│   ├── skill-marketplace.cs      # Main CLI tool
-│   └── sync-mirror.cs            # Mirror sync utility
-└── template.mcp.json             # MCP template configuration
+│   ├── skill-marketplace.cs       # Main CLI tool
+│   └── sync-mirror.cs             # Mirror sync utility
+└── template.mcp.json              # MCP template configuration
 ```
 
 ## Creating Your First Plugin
@@ -90,6 +161,7 @@ A `plugin.json` looks like this:
 | `all <list\|install\|uninstall\|diff>` | Bulk operations across all categories |
 | `bootstrap` | Clone repo, install all assets, and clean up |
 | `marketplace init` | Scaffold a new plugin group with a first skill |
+| `marketplace readme` | Auto-generate the README plugin/skill table |
 
 Run any command with:
 
@@ -101,6 +173,15 @@ dotnet run scripts/skill-marketplace.cs -- <command> [subcommand] [options]
 
 - **[CUSTOMIZATION.md](docs/CUSTOMIZATION.md)** — Customize the marketplace for your team
 - **[CLI-REFERENCE.md](docs/CLI-REFERENCE.md)** — Full CLI command reference
+
+## Uninstall
+
+```
+# Copilot CLI / Claude Code
+/plugin uninstall <plugin-name>@<marketplace-name>
+
+# VS Code — remove the entry from chat.plugins.marketplaces in settings.json
+```
 
 ## License
 
