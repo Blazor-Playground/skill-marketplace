@@ -1,25 +1,10 @@
 {
   "$schema": "../../schemas/plugin.schema.json",
   "name": "sample",
-  "description": "A sample plugin group demonstrating the marketplace structure",
+  "description": "A sample plugin demonstrating the marketplace structure",
   "version": "0.1.0",
-  "skills": [
-    {
-      "name": "hello-world",
-      "path": "skills/hello-world",
-      "description": "A minimal example skill"
-    },
-    {
-      "name": "greeting-customizer",
-      "path": "skills/greeting-customizer",
-      "description": "Customize greeting messages for CLI tools and applications"
-    }
-  ],
-  "agents": [
-    {
-      "name": "greeter",
-      "path": "agents/greeter",
-      "description": "Interactive greeter agent for generating and testing greeting configurations"
-    }
-  ]
+  "license": "MIT",
+  "keywords": ["sample", "hello-world", "greeting"],
+  "skills": "skills/",
+  "agents": "agents/"
 }

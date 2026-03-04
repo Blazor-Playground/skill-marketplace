@@ -1,73 +1,82 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "plugin.schema.json",
-  "title": "Plugin Configuration",
-  "description": "Schema for plugin.json files in the skill marketplace",
+  "$comment": "Based on https://docs.github.com/en/copilot/reference/cli-plugin-reference#pluginjson",
+  "title": "Copilot CLI Plugin Configuration",
+  "description": "Schema for plugin.json files used by GitHub Copilot CLI plugins",
   "type": "object",
-  "required": ["name", "description", "version"],
+  "required": ["name"],
   "properties": {
-    "$schema": {
-      "type": "string"
-    },
+    "$schema": { "type": "string" },
     "name": {
       "type": "string",
-      "description": "The plugin name"
+      "description": "Kebab-case plugin name (letters, numbers, hyphens only). Max 64 chars.",
+      "maxLength": 64
     },
     "description": {
       "type": "string",
-      "description": "A short description of the plugin"
+      "description": "Brief description. Max 1024 chars.",
+      "maxLength": 1024
     },
     "version": {
       "type": "string",
-      "description": "Semantic version of the plugin",
-      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+      "description": "Semantic version (e.g., 1.0.0)"
+    },
+    "author": {
+      "type": "object",
+      "description": "Plugin author info",
+      "required": ["name"],
+      "properties": {
+        "name": { "type": "string" },
+        "email": { "type": "string" },
+        "url": { "type": "string" }
+      }
+    },
+    "homepage": { "type": "string", "description": "Plugin homepage URL" },
+    "repository": { "type": "string", "description": "Source repository URL" },
+    "license": { "type": "string", "description": "License identifier (e.g., MIT)" },
+    "keywords": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Search keywords"
+    },
+    "category": { "type": "string", "description": "Plugin category" },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Additional tags"
     },
     "skills": {
-      "type": "array",
-      "description": "Skills provided by this plugin",
-      "items": {
-        "type": "object",
-        "required": ["name", "path", "description"],
-        "properties": {
-          "name": {
-            "type": "string",
-            "description": "The skill name"
-          },
-          "path": {
-            "type": "string",
-            "description": "Relative path to the skill directory"
-          },
-          "description": {
-            "type": "string",
-            "description": "A short description of the skill"
-          }
-        },
-        "additionalProperties": false
-      }
+      "$ref": "#/$defs/stringOrStringArray",
+      "description": "Path(s) to skill directories (SKILL.md files). Default: skills/"
     },
     "agents": {
-      "type": "array",
-      "description": "Agents provided by this plugin",
-      "items": {
-        "type": "object",
-        "required": ["name", "path", "description"],
-        "properties": {
-          "name": {
-            "type": "string",
-            "description": "The agent name"
-          },
-          "path": {
-            "type": "string",
-            "description": "Relative path to the agent directory"
-          },
-          "description": {
-            "type": "string",
-            "description": "A short description of the agent"
-          }
-        },
-        "additionalProperties": false
-      }
+      "$ref": "#/$defs/stringOrStringArray",
+      "description": "Path(s) to agent directories (.agent.md files). Default: agents/"
+    },
+    "commands": {
+      "$ref": "#/$defs/stringOrStringArray",
+      "description": "Path(s) to command directories"
+    },
+    "hooks": {
+      "description": "Path to a hooks config file, or an inline hooks object",
+      "oneOf": [{ "type": "string" }, { "type": "object" }]
+    },
+    "mcpServers": {
+      "description": "Path to an MCP config file (e.g., .mcp.json), or inline server definitions",
+      "oneOf": [{ "type": "string" }, { "type": "object" }]
+    },
+    "lspServers": {
+      "description": "Path to an LSP config file, or inline server definitions",
+      "oneOf": [{ "type": "string" }, { "type": "object" }]
     }
   },
-  "additionalProperties": false
+  "$defs": {
+    "stringOrStringArray": {
+      "oneOf": [
+        { "type": "string" },
+        { "type": "array", "items": { "type": "string" } }
+      ]
+    }
+  }
 }

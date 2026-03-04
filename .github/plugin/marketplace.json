@@ -1,19 +1,24 @@
 {
   "$schema": "../../schemas/marketplace.schema.json",
   "name": "my-skill-marketplace",
+  "owner": {
+    "name": "your-org",
+    "email": "plugins@example.com"
+  },
   "metadata": {
     "description": "A skill marketplace — customize this for your team",
     "version": "0.1.0"
-  },
-  "owner": {
-    "name": "your-org"
   },
   "plugins": [
     {
       "name": "sample",
       "source": "plugins/sample",
-      "description": "A sample plugin group demonstrating the marketplace structure",
-      "version": "0.1.0"
+      "description": "A sample plugin demonstrating the marketplace structure",
+      "version": "0.1.0",
+      "license": "MIT",
+      "keywords": ["sample", "hello-world", "greeting"],
+      "skills": "skills/",
+      "agents": "agents/"
     }
   ]
 }
