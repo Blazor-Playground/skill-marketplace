@@ -60,14 +60,10 @@ The `plugin.json` file describes the plugin and optionally declares MCP and LSP 
   "name": "my-plugin",
   "description": "Skills and agents for my domain",
   "version": "1.0.0",
-  "skills": [
-    {
-      "name": "my-skill",
-      "path": "skills/my-skill",
-      "description": "A short description of what the skill does"
-    }
-  ],
-  "agents": [],
+  "license": "MIT",
+  "keywords": ["example"],
+  "skills": "skills/",
+  "agents": "agents/",
   "mcpServers": {
     "my-mcp-server": {
       "type": "stdio",
@@ -88,13 +84,15 @@ The `plugin.json` file describes the plugin and optionally declares MCP and LSP 
 
 | Field | Required | Description |
 |---|---|---|
-| `name` | Yes | Plugin group name (matches directory name) |
-| `description` | Yes | Human-readable description |
+| `name` | Yes | Plugin name, kebab-case (matches directory name). Max 64 chars. |
+| `description` | No | Brief description. Max 1024 chars. |
 | `version` | No | Semantic version string |
-| `skills` | No | Array of skill references (for documentation; discovery is automatic) |
-| `agents` | No | Array of agent references |
-| `mcpServers` | No | MCP server configurations (installed to tool config files) |
-| `lspServers` | No | LSP server declarations (informational; managed externally) |
+| `skills` | No | Path string or array of path strings to skill directories (default: `skills/`) |
+| `agents` | No | Path string or array of path strings to agent directories (default: `agents/`) |
+| `mcpServers` | No | Path to MCP config file (e.g., `.mcp.json`) or inline server definitions |
+| `lspServers` | No | Path to LSP config file or inline server definitions |
+| `license` | No | License identifier (e.g., `MIT`) |
+| `keywords` | No | Search keywords array |
 
 ### 3. Verify
 
@@ -304,19 +302,22 @@ The marketplace manifest lives at `.github/plugin/marketplace.json` and register
 ```json
 {
   "name": "my-skill-marketplace",
+  "owner": {
+    "name": "my-org",
+    "email": "plugins@example.com"
+  },
   "metadata": {
     "description": "Our team's curated skill marketplace",
     "version": "1.0.0"
-  },
-  "owner": {
-    "name": "my-org"
   },
   "plugins": [
     {
       "name": "devops",
       "source": "plugins/devops",
       "description": "DevOps and CI/CD skills",
-      "version": "1.0.0"
+      "version": "1.0.0",
+      "skills": "skills/",
+      "agents": "agents/"
     },
     {
       "name": "security",

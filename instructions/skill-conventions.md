@@ -28,7 +28,7 @@ Every skill must have:
 
 ```
 plugins/<plugin-name>/
-  plugin.json              # Manifest with skills[] and agents[] arrays
+  plugin.json              # Manifest: name, skills/agents paths, mcpServers
   skills/
     <skill-name>/
       SKILL.md             # Skill definition

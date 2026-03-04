@@ -22,7 +22,7 @@ For most tasks, use the `marketplace` CLI subcommands. These are the primary too
 **"Add a skill to an existing plugin"**
 1. Create the skill directory: `plugins/<plugin>/skills/<new-skill>/`
 2. Write `SKILL.md` with YAML frontmatter (name, description) and markdown instructions
-3. Update `plugins/<plugin>/plugin.json` — add the skill to the `skills` array
+3. Skills are auto-discovered from `skills/` — no need to update plugin.json
 4. Run `marketplace readme` to refresh the README table
 
 **"What skills are available?" / "What's in this repo?"**
@@ -41,7 +41,7 @@ For most tasks, use the `marketplace` CLI subcommands. These are the primary too
 **"Add an agent"**
 1. Create `plugins/<plugin>/agents/<agent-name>/`
 2. Write `<agent-name>.agent.md` with agent instructions
-3. Update `plugins/<plugin>/plugin.json` — add to the `agents` array
+3. Agents are auto-discovered from `agents/` — no need to update plugin.json
 4. Run `marketplace readme` to refresh the README
 
 **"Validate the marketplace structure"**

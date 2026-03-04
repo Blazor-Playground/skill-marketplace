@@ -136,14 +136,9 @@ A `plugin.json` looks like this:
   "name": "my-plugin",
   "description": "What this plugin group does",
   "version": "0.1.0",
-  "skills": [
-    {
-      "name": "my-skill",
-      "path": "skills/my-skill",
-      "description": "A brief description"
-    }
-  ],
-  "agents": []
+  "license": "MIT",
+  "skills": "skills/",
+  "agents": "agents/"
 }
 ```
 

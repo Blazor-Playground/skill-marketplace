@@ -99,7 +99,7 @@ jobs:
           done
 
           # Every agent .md must have frontmatter with name
-          for agent in plugins/*/agents/*.agent.md; do
+          for agent in $(find plugins/*/agents -name '*.agent.md' 2>/dev/null); do
             [ -f "$agent" ] || continue
             if ! head -1 "$agent" | grep -q '^---'; then
               echo "::error file=$agent::Agent file missing YAML frontmatter"
